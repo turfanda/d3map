@@ -61,10 +61,9 @@
             Mass = meteor.features.map(function(d) {
                 if (d.properties.mass == null)
                     return 1;
-                else if(parseInt(d.properties.mass)>100000)
-                  return 1000
+
                 else
-                    return parseInt(d.properties.mass);
+                  return parseInt(d.properties.mass);
             });
 
             var massScale = d3.scaleLinear().domain([d3.min(Mass), d3.max(Mass)]).range([0.5, 30]);
