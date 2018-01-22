@@ -11,6 +11,16 @@
         stroke: white;
         stroke-width: 0.5;
     }
+  .infoBox{
+  opacity:0;
+  position:absolute;
+  background:yellow;
+  border-radius:10px;
+    text-align:left
+}
+  .infobox ul{
+  list-style:none;
+  }
 </style>
 
 <body>
@@ -43,6 +53,14 @@
         function ready(err, map, meteor) {
             if (err) throw err;
 
+          var max = d3.max(d3.entries(meteor.features), function(d) {
+    return d3.max(d3.entries(d.value), function(e) {
+        return d3.max(e.value);
+    });
+});
+          
+    var massScale = d3.scaleLinear().domian(meteor.).range([0, 20]);
+
 
             var countries = topojson.feature(map, map.objects.countries).features;
             g.append("g")
@@ -57,7 +75,8 @@
                 .data(meteor.features)
                 .enter().append("circle")
                 .attr("r", function(d) {
-                    return 1;
+              console.log(d.properties.mass)
+                    return 10;
                 })
                 .attr("cx", function(d) {
                     if (d.geometry != null) {
