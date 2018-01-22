@@ -23,19 +23,26 @@ var height = svg.attr("height");
 var projection = d3.geoMercator().translate([width/2,height/2]).scale(100);
 var path = d3.geoPath().projection(projection);
 
-d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, world) 
-{
-    if (error) throw error;
+d3.queue()
+  .defer(d3.json,"https://unpkg.com/world-atlas@1/world/50m.json")
+  .defer(d3.json,"https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/meteorite-strike-data.json")
+  .await(ready)
+  
+  
+  function ready(err,map,meteor){
+    
+    if (err) throw err;
 
-  var countries=topojson.feature(world,world.objects.countries).features;
-    svg.append("g")
+  var countries=topojson.feature(map,map.objects.countries).features;
+  svg.append("g")
         .selectAll(".country")
         .data(countries)
         .enter().append("path")
   .attr("class","country")
-        .attr("d", path);
-
-});
+  .attr("d", path);
+  }
+  
+  svg.append("g").selectAll(".meteor").data(meteor).enter.append("circle").attr("r",function(d){ return 10;}).attr("cx",function(d){return })
   </script>
 
 </body>
