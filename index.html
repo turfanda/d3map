@@ -36,7 +36,7 @@
         function ready(err, map, meteor) {
             if (err) throw err;
 
-                var zoom = d3.zoom()
+                var zoom = d3.zoom().
  .scaleExtent([1, 8])
     .on("zoom", zoomed);
 
