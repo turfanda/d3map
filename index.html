@@ -29,7 +29,8 @@
     <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script>
         var svg = d3.select("svg");
-
+var minMass;
+var maxMass;
         var g = svg.append("g");
 
 
@@ -53,13 +54,15 @@
         function ready(err, map, meteor) {
             if (err) throw err;
 
-          var max = d3.max(d3.entries(meteor.features), function(d) {
-    return d3.max(d3.entries(d.value), function(e) {
-        return d3.max(e.value);
-    });
+          maxMass = d3.max(d3.entries(meteor.features), function(d) {
+ return d.value.properties.mass;
 });
+          minMass = d3.min(d3.entries(meteor.features), function(d) {
+ return d.value.properties.mass;
+});
+
           
-    var massScale = d3.scaleLinear().domian(meteor.).range([0, 20]);
+         var massScale = d3.scaleLinear().domain([minMass,maxMass]).range([0, 20]);
 
 
             var countries = topojson.feature(map, map.objects.countries).features;
