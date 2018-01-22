@@ -54,15 +54,10 @@ var maxMass;
         function ready(err, map, meteor) {
             if (err) throw err;
 
-          maxMass = d3.max(d3.entries(meteor.features), function(d) {
- return d.value.properties.mass;
-});
-          minMass = d3.min(d3.entries(meteor.features), function(d) {
- return d.value.properties.mass;
-});
+          var Mass =[];
+          Mass = meteor.features.map(function(d) { return d.properties.mass});
 
-          
-         var massScale = d3.scaleLinear().domain([minMass,maxMass]).range([0, 20]);
+          var massScale = d3.scaleLinear().range([d3.min(Mass),d3.max(Mass)]).domain([1, 20]);
 
 
             var countries = topojson.feature(map, map.objects.countries).features;
@@ -78,8 +73,7 @@ var maxMass;
                 .data(meteor.features)
                 .enter().append("circle")
                 .attr("r", function(d) {
-              console.log(d.properties.mass)
-                    return 10;
+                    return massScale(d.properties.mass)
                 })
                 .attr("cx", function(d) {
                     if (d.geometry != null) {
@@ -98,7 +92,6 @@ var maxMass;
                     }
                 })
               .on("mouseover", function(d) {
-              console.log(1);
         div.transition()
           .duration(50)
           .style("opacity", 0.9);
