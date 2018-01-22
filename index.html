@@ -11,26 +11,29 @@
         stroke: white;
         stroke-width: 0.5;
     }
-  .infoBox{
-  opacity:0;
-  position:absolute;
-  background:yellow;
-  border-radius:10px;
-    text-align:left
-}
-  .infobox ul{
-  list-style:none;
-  }
+
+    .infoBox {
+        opacity: 0;
+        position: absolute;
+        background: yellow;
+        border-radius: 10px;
+        text-align: left
+    }
+
+    .infobox ul {
+        list-style: none;
+    }
 </style>
 
 <body>
+    <h1>FREE CODE CAMP WORLD MAP</h1>
     <svg width="1200" height="800"></svg>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script>
         var svg = d3.select("svg");
-var minMass;
-var maxMass;
+        var minMass;
+        var maxMass;
         var g = svg.append("g");
 
 
@@ -40,8 +43,8 @@ var maxMass;
         var projection = d3.geoMercator().translate([width / 2, height / 2]).scale(200);
         var path = d3.geoPath().projection(projection);
 
-       var div = d3.select("body").append("div")
-      .attr("class", "infoBox");
+        var div = d3.select("body").append("div")
+            .attr("class", "infoBox");
 
 
         d3.queue()
@@ -54,21 +57,17 @@ var maxMass;
         function ready(err, map, meteor) {
             if (err) throw err;
 
-          var Mass =[];
-          Mass = meteor.features.map(function(d) { 
-            if(d.properties.mass==null)
-              return 1;
-            else if(parseInt(d.properties.mass)=>100000)
-              return 100000;
-          else 
-           return parseInt(d.properties.mass);});
-          
-          console.log(Mass);
-          
-          console.log(d3.min(Mass));
-          console.log(d3.max(Mass));
+            var Mass = [];
+            Mass = meteor.features.map(function(d) {
+                if (d.properties.mass == null)
+                    return 1;
+                else if(parseInt(d.properties.mass)>100000)
+                  return 1000
+                else
+                    return parseInt(d.properties.mass);
+            });
 
-          var massScale = d3.scaleLinear().domain([d3.min(Mass),d3.max(Mass)]).range([0.5, 30]);
+            var massScale = d3.scaleLinear().domain([d3.min(Mass), d3.max(Mass)]).range([0.5, 30]);
 
 
             var countries = topojson.feature(map, map.objects.countries).features;
@@ -102,19 +101,19 @@ var maxMass;
                         return 10;
                     }
                 })
-              .on("mouseover", function(d) {
-        div.transition()
-          .duration(50)
-          .style("opacity", 0.9);
-        div.html("<ul><li>Name: " +d.properties.name+"</li><li>Mass: "+ d.properties.mass+"</li><li>Fall: "+ d.properties.fall+"</li><li>RecClass: "+ d.properties.recclass+"</li><li>Reclat: "+ d.properties.reclat+"</li><li>Year: "+ d.properties.year+"</li></ul>")
-          .style("left", (d3.event.pageX + 5) + "px")
-          .style("top", (d3.event.pageY - 50) + "px");
-      })
-              .on("mouseout", function() {
-        div.transition()
-          .duration(100)
-          .style("opacity", 0);
-      });
+                .on("mouseover", function(d) {
+                    div.transition()
+                        .duration(50)
+                        .style("opacity", 0.9);
+                    div.html("<ul><li>Name: " + d.properties.name + "</li><li>Mass: " + d.properties.mass + "</li><li>Fall: " + d.properties.fall + "</li><li>RecClass: " + d.properties.recclass + "</li><li>Reclat: " + d.properties.reclat + "</li><li>Year: " + d.properties.year + "</li></ul>")
+                        .style("left", (d3.event.pageX + 5) + "px")
+                        .style("top", (d3.event.pageY - 50) + "px");
+                })
+                .on("mouseout", function() {
+                    div.transition()
+                        .duration(100)
+                        .style("opacity", 0);
+                });
 
 
             function zoomed() {
