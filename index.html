@@ -55,9 +55,20 @@ var maxMass;
             if (err) throw err;
 
           var Mass =[];
-          Mass = meteor.features.map(function(d) { return d.properties.mass});
+          Mass = meteor.features.map(function(d) { 
+            if(d.properties.mass==null)
+              return 1;
+            else if(parseInt(d.properties.mass)=>100000)
+              return 100000;
+          else 
+           return parseInt(d.properties.mass);});
+          
+          console.log(Mass);
+          
+          console.log(d3.min(Mass));
+          console.log(d3.max(Mass));
 
-          var massScale = d3.scaleLinear().range([d3.min(Mass),d3.max(Mass)]).domain([1, 20]);
+          var massScale = d3.scaleLinear().domain([d3.min(Mass),d3.max(Mass)]).range([0.5, 30]);
 
 
             var countries = topojson.feature(map, map.objects.countries).features;
