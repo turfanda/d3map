@@ -4,6 +4,11 @@
   body{
   text-align:center;
   }
+  .country{
+  fill:#cccccc;
+  stroke:black;
+    stroke-width:0.5;
+  }
 </style>
 <body>
 <svg width="960" height="600"></svg>
@@ -15,7 +20,7 @@ var svg = d3.select("svg");
 var width = svg.attr("width");
 var height = svg.attr("height");
   
-var projection = d3.geoMercator().translate([width/2,height/2]);
+var projection = d3.geoMercator().translate([width/2,height/2]).scale(100);
 var path = d3.geoPath().projection(projection);
 
 d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, world) 
@@ -24,9 +29,10 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, world)
 
   var countries=topojson.feature(world,world.objects.countries).features;
     svg.append("g")
-        .selectAll("path")
+        .selectAll(".country")
         .data(countries)
         .enter().append("path")
+  .attr("class","country")
         .attr("d", path);
 
 });
