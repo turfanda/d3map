@@ -30,7 +30,6 @@ d3.queue()
   
   
   function ready(err,map,meteor){
-    
     if (err) throw err;
 
   var countries=topojson.feature(map,map.objects.countries).features;
@@ -40,9 +39,19 @@ d3.queue()
         .enter().append("path")
   .attr("class","country")
   .attr("d", path);
+
+     svg.append("g")
+    .selectAll(".meteor")
+    .data(meteor.features)
+    .enter().append("circle")
+    .attr("r",function(d){ return 10;})
+    .attr("cx",function(d){console.log(d.geometry.coordinates[0]);})
+          //var coordinate = projection(d.geometry.coordinates[0],d.geometry.coordinates[1]); return coordinate[0];})
+    //.attr("cy",function(d){var coordinate = projection(d.geometry.coordinates[0],d.geometry.coordinates[1]); return coordinate[1];})
+    
   }
   
-  svg.append("g").selectAll(".meteor").data(meteor).enter.append("circle").attr("r",function(d){ return 10;}).attr("cx",function(d){return })
+
   </script>
 
 </body>
